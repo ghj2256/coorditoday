@@ -8,17 +8,17 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={icon} className="App" alt="icon" />
+          <img src={icon} className="App-logo" alt="icon" />
           <p>
             Today coordination
           </p>
           <a
             className="App-link"
-            href="https://reactjs.org"
+            href="https://www.weather.go.kr"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Learn React
+            Weather Information
           </a>
         </header>
         <div>
