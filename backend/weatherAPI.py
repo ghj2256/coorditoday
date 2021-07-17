@@ -6,7 +6,7 @@ timeList = ["0200", "0500", "0800", "1100", "1400", "1700", "2000", "2300"]
 now = "1016"
 
 url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst'
-serviceKey = 'urjKpvkQtVAGSoxOukdn+QaPeHLmvVmcG/6REClR/yTw/uaHOZsS1A+Y9o6+hlAexg8su+n2kezltaSsu+Ys1A=='
+serviceKey = ''  # git pull 할때 키 꼭 지우기!!!
 baseDate = datetime.now().strftime("%Y%m%d")  # 기준일자
 for i in timeList:  # 기준시간
     if now >= i:
