@@ -1,26 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Location extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-      }
-    
-      componentDidMount() {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          console.log("Latitude is :", position.coords.latitude);
-          console.log("Longitude is :", position.coords.longitude);
-        });
-      }
-    
-      render() {
-        return (
-          <div>
-            <h4>Using geolocation JavaScript API in React</h4>
-          </div>
-        );
-      }
+const Location = () => {
+  return (
+    <div>
+      <h4>Using geolocation JavaScript API in React</h4>
+      <p>{geolocation()}</p>
+    </div>
+  );
+}
+
+const geolocation = () => {
+
+  let lati, longi;
+
+  navigator.geolocation.getCurrentPosition = (position) => {
+    console.log("Latitude is :", position.coords.latitude);
+    console.log("Longitude is :", position.coords.longitude);
+    lati = position.coords.latitude;
+    longi = position.coords.longitude;
+
+    return [lati, longi];
+  }
+
 }
 
 export default Location;
