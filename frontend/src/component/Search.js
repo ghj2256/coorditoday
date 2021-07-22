@@ -4,7 +4,9 @@ class Search extends Component {
     render() {
         return(
             <div>
-                <input type='text'/>
+                <form>
+                    <input type='text' placeholder="Search..."/>
+                </form>
             </div>
         );
     }
