@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import icon from './assets/img/tshirt.svg'
 import './assets/css/App.css';
-import Search from './component/Search';
+import Header from './component/Header';
 import Weather from './component/Weather'
 import Button from '@material-ui/core/Button' 
 
@@ -9,10 +9,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <p>오늘 뭐입지?</p>
-        </header>
-        <p><Search /></p>
+        <Header />
         <div className="App-contents">
           <p><Weather /></p>
           <img src={icon} className="App-img" alt="icon" />
@@ -27,9 +24,11 @@ class App extends Component {
           >
             Weather Information
           </a>
-          <Button variant="contained" color="primary">
-            Hello World
-          </Button>
+          <p>
+            <Button variant="contained" color="primary">
+              Hello World
+            </Button>
+          </p>
         </div>
       </div>
     );
