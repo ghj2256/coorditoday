@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 from urllib import parse
 from operator import itemgetter
+
 
 
 def weather():
@@ -11,7 +12,10 @@ def weather():
     # git pull 할때 키 꼭 지우기!!!
 
     base_date = datetime.now().strftime("%Y%m%d")  # 기준일자
-    if datetime.now().minute < 30:  # 기준시각 30분을 기준으로 나눔
+    if datetime.now().hour == 0 and datetime.now().minute < 30:
+        base_date = datetime.strftime(datetime.strptime(base_date, '%Y%m%d') - timedelta(days=1), '%Y%m%d')
+        base_time = 2300
+    elif datetime.now().minute < 30:  # 기준시각 30분을 기준으로 나눔
         base_time = int(datetime.now().strftime("%H00")) - 100
     else:
         base_time = datetime.now().strftime("%H00")
@@ -29,8 +33,10 @@ def weather():
     try:
         forecast_data = response.json()['response']['body']['items']['item']
         print(forecast_data)
-        now_weather = dict(zip([x['category'] for x in forecast_data if x['fcstTime'] == str(int(base_time) + 100)],
-                               [x['fcstValue'] for x in forecast_data if x['fcstTime'] == str(int(base_time) + 100)]))
+        now_weather = dict(zip([x['category'] for x in forecast_data if x['fcstTime'] == datetime.strftime(
+                                datetime.strptime(str(base_time), '%H00') + timedelta(hours=1), '%H00')],
+                               [x['fcstValue'] for x in forecast_data if x['fcstTime'] == datetime.strftime(
+                                datetime.strptime(str(base_time), '%H00') + timedelta(hours=1), '%H00')]))
         print(now_weather)
         print('현재 기온:', now_weather['T1H'], '℃')
     except KeyError:
