@@ -1,28 +1,41 @@
 from datetime import datetime
 import requests
 from urllib import parse
+from operator import itemgetter
 
-timeList = ["0200", "0500", "0800", "1100", "1400", "1700", "2000", "2300"]
-now = str(datetime.now().hour) + str(datetime.now().minute)
 
-url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
-serviceKey = ''  # git pull 할때 키 꼭 지우기!!!
-baseDate = datetime.now().strftime("%Y%m%d")  # 기준일자
-baseTime = '0000'
-for i in timeList:  # 기준시간
-    if now >= i:
-        baseTime = i
-nx = '1'  # X격자
-ny = '1'  # Y격자
+def weather():
+    url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst'
 
-queryParam = '?' + parse.urlencode({parse.quote_plus('ServiceKey'): serviceKey, parse.quote_plus('pageNo'): 1,
-                                    parse.quote_plus('numOfRows'): '10', parse.quote_plus('dataType'): 'JSON',
-                                    parse.quote_plus('base_date'): baseDate, parse.quote_plus('base_time'): '0200',
-                                    parse.quote_plus('nx'): '58', parse.quote_plus('ny'): '125'})
+    service_key = 'urjKpvkQtVAGSoxOukdn+QaPeHLmvVmcG/6REClR/yTw/uaHOZsS1A+Y9o6+hlAexg8su+n2kezltaSsu+Ys1A=='
+    # git pull 할때 키 꼭 지우기!!!
 
-response = requests.get(url + queryParam)
-weather = response.json()['response']['body']['items']['item']
-now_weather = dict(zip([x['category'] for x in weather], [x['fcstValue'] for x in weather]))
-print(now_weather)
-print(13.12 + 0.6215 * int(now_weather['TMP']) - 11.37 * ((float(now_weather['WSD'])*3.6) ** 0.16)
-      + 0.3965 * int(now_weather['TMP']) * ((float(now_weather['WSD'])*3.6) ** 0.16))
+    base_date = datetime.now().strftime("%Y%m%d")  # 기준일자
+    if datetime.now().minute < 30:  # 기준시각 30분을 기준으로 나눔
+        base_time = int(datetime.now().strftime("%H00")) - 100
+    else:
+        base_time = datetime.now().strftime("%H00")
+
+    nx = 58  # X격자
+    ny = 125  # Y격자
+    print(base_date, base_time)
+    query_param = '?' + parse.urlencode({parse.quote_plus('ServiceKey'): service_key, parse.quote_plus('pageNo'): 1,
+                                         parse.quote_plus('numOfRows'): 1000, parse.quote_plus('dataType'): 'JSON',
+                                         parse.quote_plus('base_date'): base_date,
+                                         parse.quote_plus('base_time'): base_time,
+                                         parse.quote_plus('nx'): nx, parse.quote_plus('ny'): ny})
+
+    response = requests.get(url + query_param)
+    try:
+        forecast_data = response.json()['response']['body']['items']['item']
+        print(forecast_data)
+        now_weather = dict(zip([x['category'] for x in forecast_data if x['fcstTime'] == str(int(base_time) + 100)],
+                               [x['fcstValue'] for x in forecast_data if x['fcstTime'] == str(int(base_time) + 100)]))
+        print(now_weather)
+        print('현재 기온:', now_weather['T1H'], '℃')
+    except KeyError:
+        print('something wrong!')
+
+
+if __name__ == "__main__":
+    weather()
