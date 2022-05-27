@@ -7,7 +7,7 @@ from conversion import conversion
 def weather():
     url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst'
 
-    service_key = 'urjKpvkQtVAGSoxOukdn+QaPeHLmvVmcG/6REClR/yTw/uaHOZsS1A+Y9o6+hlAexg8su+n2kezltaSsu+Ys1A=='
+    service_key = ''
     # git pull 할때 키 꼭 지우기!!!
 
     base_date = datetime.now().strftime("%Y%m%d")  # 기준 일자
